@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Log in{% endblock %}
+{% block content %}
+<section class="auth-layout">
+  <div class="auth-aside">
+    <div class="eyebrow">YOUR MONEY, IN FOCUS</div>
+    <h1>Small steps.<br><span>Clearer finances.</span></h1>
+    <p>A simple place to keep track of what comes in and what goes out.</p>
+    <div class="aside-orbit" aria-hidden="true"><div class="orbit-center">₹</div><span class="orbit-chip chip-one">Income</span><span class="orbit-chip chip-two">Expenses</span><span class="orbit-chip chip-three">You</span></div>
+  </div>
+  <div class="auth-card">
+    <div class="eyebrow">WELCOME BACK</div>
+    <h2>Log in to Paisa</h2>
+    <p class="muted">Pick up where you left off.</p>
+    <form method="post" class="form-stack">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div><label for="username" class="form-label">Username</label><input class="form-control" id="username" name="username" autocomplete="username" required autofocus></div>
+      <div><label for="password" class="form-label">Password</label><input class="form-control" id="password" name="password" type="password" autocomplete="current-password" required></div>
+      <button class="btn btn-primary w-100" type="submit">Log in <span aria-hidden="true">→</span></button>
+    </form>
+    <p class="auth-switch">New to Paisa? <a href="{{ url_for('register') }}">Create an account</a></p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Transactions{% endblock %}
+{% block content %}
+<section class="section-heading heading-with-action">
+  <div><div class="eyebrow">YOUR MONEY, ACCOUNTED FOR</div><h1>Transactions</h1><p class="muted">{{ total }} {{ 'transaction' if total == 1 else 'transactions' }} in your history</p></div>
+  <a class="btn btn-primary" href="{{ url_for('add_transaction') }}">+ Add transaction</a>
+</section>
+<div class="panel table-panel">
+  {% if transactions %}
+    <div class="table-responsive"><table class="table transaction-table align-middle mb-0">
+      <thead><tr><th scope="col">Date</th><th scope="col">Type</th><th scope="col">Reason</th><th scope="col" class="text-end">Amount</th></tr></thead>
+      <tbody>{% for item in transactions %}
+        <tr><td class="date-cell">{{ item.transaction_date|display_date }}</td><td><span class="type-pill {{ 'debit' if item.type == 'Debit' else 'credit' }}">{{ item.type }}</span></td><td class="reason-cell">{{ item.reason }}</td><td class="amount-cell text-end {{ 'text-debit' if item.type == 'Debit' else 'text-credit' }}">{{ '−' if item.type == 'Debit' else '+' }}₹{{ '%.2f'|format(item.amount_paise / 100) }}</td></tr>
+      {% endfor %}</tbody>
+    </table></div>
+  {% else %}
+    <div class="empty-state"><div class="empty-icon">↗</div><h3>No transactions yet</h3><p>Your transactions will show up here once you add the first one.</p><a class="btn btn-primary" href="{{ url_for('add_transaction') }}">Add your first transaction</a></div>
+  {% endif %}
+</div>
+<nav class="pagination-bar" aria-label="Transaction pages">
+  <span class="page-indicator">Page <strong>{{ page }}</strong> of <strong>{{ page_count }}</strong></span>
+  <div class="pagination-actions">
+    {% if page > 1 %}<a class="btn btn-light" href="{{ url_for('transactions', page=page - 1) }}">← Previous</a>{% else %}<button class="btn btn-light" disabled>← Previous</button>{% endif %}
+    {% if page < page_count %}<a class="btn btn-light" href="{{ url_for('transactions', page=page + 1) }}">Next →</a>{% else %}<button class="btn btn-light" disabled>Next →</button>{% endif %}
+  </div>
+</nav>
+{% endblock %}

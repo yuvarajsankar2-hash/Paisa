@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7fb">
+  <title>{% block title %}Paisa{% endblock %} · Paisa</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{{ url_for('home') if session.get('user_id') else url_for('login') }}">
+      <span class="brand-mark">₹</span><span>Paisa<span class="brand-dot">.</span></span>
+    </a>
+    {% if session.get('user_id') %}
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="{{ url_for('home') }}" class="{{ 'active' if request.endpoint == 'home' else '' }}">Home</a>
+        <a href="{{ url_for('transactions') }}" class="{{ 'active' if request.endpoint == 'transactions' else '' }}">Transactions</a>
+      </nav>
+      <div class="account">
+        <button class="avatar" id="account-toggle" type="button" aria-expanded="false" aria-controls="account-menu" aria-label="Open account menu">
+          {{ session.get('username', 'U')[0]|upper }}
+        </button>
+        <div class="account-menu" id="account-menu" hidden>
+          <div class="account-menu-name">{{ session.get('full_name') }}</div>
+          <a href="{{ url_for('change_password') }}">Change Password</a>
+          <form action="{{ url_for('logout') }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit">Log Out</button>
+          </form>
+        </div>
+      </div>
+    {% endif %}
+  </header>
+
+  <main class="page-shell">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-stack" aria-live="polite">
+          {% for category, message in messages %}
+            <div class="alert {{ 'alert-success' if category == 'success' else 'alert-danger' }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">A little more clarity, every day. <span>© {{ now_year }}</span></footer>
+  <script>window.paisaChartData = {{ chart|default(none)|tojson }};</script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

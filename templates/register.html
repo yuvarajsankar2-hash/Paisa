@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Create account{% endblock %}
+{% block content %}
+<section class="auth-layout auth-layout-compact">
+  <div class="auth-aside">
+    <div class="eyebrow">A FRESH START</div>
+    <h1>Make room<br>for <span>your goals.</span></h1>
+    <p>Get a clearer view of your everyday finances, one transaction at a time.</p>
+    <div class="aside-stat"><span class="stat-icon">✳</span><span>Simple, personal, and all yours.</span></div>
+  </div>
+  <div class="auth-card">
+    <div class="eyebrow">GET STARTED</div><h2>Create your account</h2>
+    <p class="muted">It only takes a minute.</p>
+    <form method="post" class="form-stack">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div><label for="username" class="form-label">Username</label><input class="form-control" id="username" name="username" minlength="3" maxlength="30" autocomplete="username" required><div class="form-hint">3–30 letters, numbers, dots, underscores, or hyphens.</div></div>
+      <div><label for="full_name" class="form-label">Full name</label><input class="form-control" id="full_name" name="full_name" maxlength="100" autocomplete="name" required></div>
+      <div><label for="email" class="form-label">Email address</label><input class="form-control" id="email" name="email" type="email" maxlength="254" autocomplete="email" required></div>
+      <div><label for="password" class="form-label">Password</label><input class="form-control" id="password" name="password" type="password" minlength="8" autocomplete="new-password" required><div class="form-hint">At least 8 characters.</div></div>
+      <div><label for="confirm_password" class="form-label">Confirm password</label><input class="form-control" id="confirm_password" name="confirm_password" type="password" minlength="8" autocomplete="new-password" required></div>
+      <button class="btn btn-primary w-100" type="submit">Create account <span aria-hidden="true">→</span></button>
+    </form>
+    <p class="auth-switch">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+  </div>
+</section>
+{% endblock %}

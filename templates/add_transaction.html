@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Add transaction{% endblock %}
+{% block content %}
+<section class="content-narrow">
+  <a class="back-link" href="{{ url_for('home') }}">← Back to Home</a>
+  <div class="section-heading"><div class="eyebrow">KEEP YOUR RECORDS UP TO DATE</div><h1>Add a transaction</h1><p class="muted">A quick note today makes the bigger picture clearer.</p></div>
+  <div class="panel form-panel">
+    <form method="post" class="form-stack" id="transaction-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div><label class="form-label" for="transaction_date">Transaction date</label><input class="form-control" id="transaction_date" name="transaction_date" inputmode="numeric" placeholder="DD-MM-YYYY" pattern="\d{2}-\d{2}-\d{4}" value="{{ today }}" maxlength="10" required><div class="form-hint">Use DD-MM-YYYY. Future dates aren't allowed.</div></div>
+      <div><label class="form-label" for="type">Transaction type</label><select class="form-select" id="type" name="type" required><option value="" selected disabled>Choose a type</option><option value="Debit">Debit · Money out</option><option value="Credit">Credit · Money in</option></select></div>
+      <div><label class="form-label" for="reason">Reason</label><input class="form-control" id="reason" name="reason" maxlength="200" placeholder="e.g. Groceries, salary, bus fare" required></div>
+      <div><label class="form-label" for="amount">Amount <span class="label-note">(₹)</span></label><div class="input-group"><span class="input-group-text">₹</span><input class="form-control" id="amount" name="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required></div></div>
+      <div class="form-actions"><button class="btn btn-primary" type="submit">Save transaction</button><a class="btn btn-light" href="{{ url_for('transactions') }}">View history</a></div>
+    </form>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Something went wrong{% endblock %}
+{% block content %}
+<section class="empty-state error-state"><div class="empty-icon">!</div><div class="eyebrow">REQUEST COULD NOT BE COMPLETED</div><h1>Let's try that again.</h1><p>{{ error.description }}</p><a class="btn btn-primary" href="{{ url_for('home') if session.get('user_id') else url_for('login') }}">Go back</a></section>
+{% endblock %}

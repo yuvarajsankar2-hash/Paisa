@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<section class="welcome-row">
+  <div><div class="eyebrow">{{ today }}</div><h1>Good to see you, {{ session.get('full_name') }}<span class="wave"> ✳</span></h1><p class="muted">Here's how your money is looking this month.</p></div>
+  <a class="btn btn-primary add-expense-btn" href="{{ url_for('add_transaction') }}">+ Add Expense</a>
+</section>
+<section class="summary-grid" aria-label="This month's summary">
+  <article class="summary-card income-card"><div class="summary-top"><span class="summary-label">Money in</span><span class="summary-icon">↙</span></div><div class="summary-value">₹{{ '%.2f'|format(summary.Credit / 100) }}</div><div class="summary-caption">Credits this month</div></article>
+  <article class="summary-card expense-card"><div class="summary-top"><span class="summary-label">Money out</span><span class="summary-icon">↗</span></div><div class="summary-value">₹{{ '%.2f'|format(summary.Debit / 100) }}</div><div class="summary-caption">Debits this month</div></article>
+  <article class="summary-card balance-card"><div class="summary-top"><span class="summary-label">Net this month</span><span class="summary-icon">◎</span></div><div class="summary-value">₹{{ '%.2f'|format((summary.Credit - summary.Debit) / 100) }}</div><div class="summary-caption">Money in minus money out</div></article>
+</section>
+<section class="dashboard-grid">
+  <article class="panel chart-panel"><div class="panel-heading"><div><h2>Money over time</h2><p class="muted">Income and spending by month</p></div><span class="chart-legend"><i class="legend-dot income-dot"></i>In <i class="legend-dot expense-dot"></i>Out</span></div>
+    {% if chart.labels %}<div class="chart-wrap"><canvas id="overview-chart" aria-label="Chart of monthly income and expenses"></canvas></div>{% else %}<div class="chart-empty">Add transactions to see your monthly trends.</div>{% endif %}
+  </article>
+  <article class="panel recent-panel"><div class="panel-heading"><div><h2>Recent activity</h2><p class="muted">Your latest transactions</p></div><a class="text-link" href="{{ url_for('transactions') }}">See all →</a></div>
+    {% if recent %}<div class="recent-list">{% for item in recent %}
+      <div class="recent-item"><div class="transaction-mark {{ 'mark-debit' if item.type == 'Debit' else 'mark-credit' }}">{{ '↗' if item.type == 'Debit' else '↙' }}</div><div class="recent-description"><strong>{{ item.reason }}</strong><span>{{ item.transaction_date|display_date }} · {{ item.type }}</span></div><div class="recent-amount {{ 'text-debit' if item.type == 'Debit' else 'text-credit' }}">{{ '−' if item.type == 'Debit' else '+' }}₹{{ '%.2f'|format(item.amount_paise / 100) }}</div></div>
+    {% endfor %}</div>{% else %}<div class="chart-empty">Your latest activity will appear here.</div>{% endif %}
+  </article>
+</section>
+{% endblock %}
