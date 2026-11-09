@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: paisa
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120
+    healthCheckPath: /login
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: HTTPS_ONLY
+        value: "true"
+      - key: EXPENSE_TRACKER_DATABASE
+        value: /var/data/expenses.db
+    disk:
+      name: paisa-data
+      mountPath: /var/data
+      sizeGB: 1
